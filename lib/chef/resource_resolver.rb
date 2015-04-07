@@ -68,7 +68,7 @@ class Chef
         if priority_list.index(handlers.first).nil?
           # if we had more than one and we picked one with a precidence of infinity that means that the resource_priority_map
           # entry for this resource is missing -- we should probably raise here and force resolution of the ambiguity.
-          Chef::Log.warn "Ambiguous resource precedence: #{handlers}, please use the resource_priority_map"
+          Chef::Log.warn "Ambiguous resource precedence: #{handlers}, please use Chef.set_resource_priority_array to provide determinism"
         end
         handlers = [ handlers.first ]
       end

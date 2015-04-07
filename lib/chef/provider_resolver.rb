@@ -86,6 +86,11 @@ class Chef
         # to pick amongst N different ways to start init scripts on different debian/ubuntu systems.
         priority_list = [ get_priority_array(node, resource.resource_name) ].flatten.compact
         handlers = handlers.sort_by { |x| i = priority_list.index x; i.nil? ? Float::INFINITY : i }
+        if priority_list.index(handlers.first).nil?
+          # if we had more than one and we picked one with a precidence of infinity that means that the resource_priority_map
+          # entry for this resource is missing -- we should probably raise here and force resolution of the ambiguity.
+          Chef::Log.warn "Ambiguous provider precedence: #{handlers}, please use Chef.set_provider_priority_array to provide determinism"
+        end
         handlers = [ handlers.first ]
       end
 
